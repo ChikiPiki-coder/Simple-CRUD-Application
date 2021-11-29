@@ -1,27 +1,41 @@
 package ru.webapp.tamik.models;
 
+import lombok.Data;
+
+import javax.persistence.*;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+
+@Data
+@Entity
+@Table(name="Person")
 public class Person {
-    private int id;
+    @Id
+    @Column(name="id")
+    @GeneratedValue
+    Integer id;
 
     @NotEmpty(message= "Имя не может быть пустым")
     @Size(min=2,max=30,message="Имя должно быть не меньше 2 и не больше 30 букв")
+    @Column(name="name")
     private String name;
+
     @NotEmpty(message= "Фамилия не может быть пустой")
     @Size(min=2,max=30,message="Фамилия должна быть не меньше 2 и не больше 30 букв")
+    @Column(name="lastName")
     private String lastName;
 
     @Email(message="Емаил введен неправильно")
+    @Column(name="email")
     private String email;
 
     public Person() {
     }
 
-    public Person(int id, String name, String lastName, String email) {
-        this.id = id;
+    public Person(String name, String lastName, String email) {
         this.name = name;
         this.lastName = lastName;
         this.email = email;
@@ -41,14 +55,6 @@ public class Person {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {

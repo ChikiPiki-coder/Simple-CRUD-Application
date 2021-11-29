@@ -1,34 +1,32 @@
 package ru.webapp.tamik.dao;
 
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import ru.webapp.tamik.models.Person;
+import ru.webapp.tamik.repositories.PersonRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Service
 public class PersonDAO {
-    private static int inx;
-    private List<Person> people;
 
-    {
-        people=new ArrayList<>();
-        people.add(new Person(++inx,"Egor","Shkarin","Shkarin@mail.com"));
-        people.add(new Person(++inx,"Mirza","Amrakhov","Amrakhov@mail.com"));
-        people.add(new Person(++inx,"Tamik","Kozhiev","Kozhiev@mail.com"));
-        people.add(new Person(++inx,"Nika","Ryabova","Ryabova@mail.com"));
+    private final PersonRepository personRepository;
+
+    public PersonDAO(PersonRepository personRepository) {
+        this.personRepository = personRepository;
     }
 
     public List<Person> index(){
-        return people;
+        return personRepository.findAll();
     }
+
+
     public Person show(int id){
-        return people.stream().filter(person->person.getId()==id).findAny().orElse(null);
+        return personRepository.findPersonById(id);
     }
 
     public void save(Person person){
-        person.setId(++inx);
-        people.add(person);
+        personRepository.save(person);
     }
 
     public void update(int id,Person updatedPerson){
@@ -36,10 +34,10 @@ public class PersonDAO {
         personToBeUpdated.setEmail(updatedPerson.getEmail());
         personToBeUpdated.setName(updatedPerson.getName());
         personToBeUpdated.setLastName(updatedPerson.getLastName());
+        save(personToBeUpdated);
     }
 
     public void delete(int id){
-        people.removeIf(p->p.getId()==id);
-         inx--;
+        personRepository.delete(personRepository.findPersonById(id));
     }
 }

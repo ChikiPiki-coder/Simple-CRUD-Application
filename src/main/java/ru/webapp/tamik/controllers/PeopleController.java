@@ -1,7 +1,7 @@
 package ru.webapp.tamik.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +39,7 @@ public class PeopleController {
     }
 
     @PostMapping()
+    @Transactional
     public String create(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return "people/new";
